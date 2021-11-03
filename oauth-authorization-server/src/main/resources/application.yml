@@ -1,0 +1,41 @@
+server:
+  port: 5000
+
+spring:
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  datasource:
+    url: jdbc:h2:mem:authorization
+    driver-class-name: org.h2.Driver
+    username: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties.hibernate.hbm2ddl.auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+security:
+  oauth2:
+    jwt:
+      signkey: 123@#$
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: TRACE
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
