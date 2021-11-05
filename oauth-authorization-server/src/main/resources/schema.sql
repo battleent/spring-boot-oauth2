@@ -60,8 +60,8 @@ create table IF NOT EXISTS oauth_approvals
 insert into oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types,
                                  web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity,
                                  additional_information, autoapprove)
-values ('client1',
-        'resource1',
+values ('klet-client',
+        'account,klet-api',
         '$2a$10$8dX0cd5hb3is1tsPrPUWT.TDjB4LjdbmmfD/r0Bq10GC6kPeOQT7W',
         'account',
         'authorization_code,refresh_token',
@@ -71,8 +71,8 @@ values ('client1',
         null,
         null,
         'true'),
-       ('client2',
-        'resource2',
+       ('lck-dive-client',
+        'account,lck-dive-api',
         '$2a$10$8dX0cd5hb3is1tsPrPUWT.TDjB4LjdbmmfD/r0Bq10GC6kPeOQT7W',
         'account',
         'authorization_code,refresh_token',
@@ -81,21 +81,34 @@ values ('client1',
         null,
         null,
         null,
-        'true');
+        'true')
+;
 
 create table IF NOT EXISTS users
 (
-    `id`       bigint(20)  NOT NULL AUTO_INCREMENT,
-    `username` varchar(20) NOT NULL,
-    `password` char(60)    NOT NULL
+    `id`         BIGINT      NOT NULL AUTO_INCREMENT,
+    `created_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updated_at` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
+    `username`   VARCHAR(20) NOT NULL,
+    `password`   CHAR(60)    NOT NULL
 );
 
-create table IF NOT EXISTS user_roles
+create table IF NOT EXISTS authorities
 (
-    user_id bigint not null,
-    roles   varchar(255)
+    `id`         bigint(20)   NOT NULL AUTO_INCREMENT,
+    `created_at` datetime(6)  NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updated_at` datetime(6)  NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
+    `role_name`  varchar(128) NOT NULL
 );
 
-insert into users(username, password)
-values ('user', '$2a$10$8dX0cd5hb3is1tsPrPUWT.TDjB4LjdbmmfD/r0Bq10GC6kPeOQT7W')
+create table IF NOT EXISTS users_authorities
+(
+    `id`           bigint(20)  NOT NULL AUTO_INCREMENT,
+    `created_at`   datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updated_at`   datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) on update CURRENT_TIMESTAMP(6),
+    `user_id`      bigint(20)  NOT NULL,
+    `authority_id` bigint(20)  NOT NULL
+);
 
+insert into users(username, password, created_at)
+values ('user', '$2a$10$8dX0cd5hb3is1tsPrPUWT.TDjB4LjdbmmfD/r0Bq10GC6kPeOQT7W', now());

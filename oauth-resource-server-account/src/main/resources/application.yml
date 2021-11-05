@@ -1,5 +1,5 @@
 server:
-  port: 5000
+  port: 8081
 
 spring:
   h2:
@@ -8,19 +8,21 @@ spring:
       settings:
         web-allow-others: true
   datasource:
-    url: jdbc:h2:mem:authorization
+    url: jdbc:h2:mem:account
     driver-class-name: org.h2.Driver
     username: sa
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    properties.hibernate.hbm2ddl.auto: validate
-    properties:
-      hibernate:
-        format_sql: true
-  session:
-    store-type: jdbc
-    jdbc:
-      initialize-schema: always
+    properties.hibernate.hbm2ddl.auto: update
+    showSql: true
+
+security:
+  oauth2:
+    client:
+      client-id: lck-dive-client
+      client-secret: pass
+    resource:
+      token-info-uri: http://localhost:5000/oauth/check_token
 
 logging:
   level:
